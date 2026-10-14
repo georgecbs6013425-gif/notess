@@ -1,0 +1,76 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Database - StudentDB</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav>
+    <h2>StudentDB</h2>
+    <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="create.html">Create Database</a>
+        <a href="post.html">Post Records</a>
+        <a href="view.html">View Database</a>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="form-box">
+
+        <h1>Create Database</h1>
+        <p>Initialize storage for student information.</p>
+
+        <form id="databaseForm">
+
+            <label for="databaseName">Database Name</label>
+            <input type="text" id="databaseName"
+                   placeholder="Enter database name"
+                   value="StudentDB" required>
+
+            <button type="submit" class="btn">
+                Create Database
+            </button>
+
+        </form>
+
+        <p id="message"></p>
+
+    </div>
+</div>
+
+<script>
+document.getElementById("databaseForm")
+.addEventListener("submit", function(event) {
+
+    event.preventDefault();
+
+    const name = document.getElementById("databaseName")
+        .value.trim();
+
+    if (!name) {
+        document.getElementById("message").textContent =
+            "Please enter a database name.";
+        return;
+    }
+
+    if (localStorage.getItem("studentRecords") === null) {
+        localStorage.setItem("studentRecords", JSON.stringify([]));
+    }
+
+    localStorage.setItem("databaseName", name);
+
+    document.getElementById("message").textContent =
+        "Database storage initialized successfully!";
+
+    document.getElementById("message").style.color = "green";
+});
+</script>
+
+</body>
+</html>
+```
