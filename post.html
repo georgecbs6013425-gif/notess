@@ -1,0 +1,109 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post Records | StudentDB</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav>
+    <h2>StudentDB</h2>
+
+    <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="create.html">Create Database</a>
+        <a href="post.html">Post Records</a>
+        <a href="view.html">View Database</a>
+    </div>
+</nav>
+
+<section class="container">
+    <div class="form-box">
+
+        <h1>Post Student Records</h1>
+
+        <form id="studentForm">
+
+            <label for="admission">Admission Number</label>
+            <input type="text" id="admission" required>
+
+            <label for="name">Full Name</label>
+            <input type="text" id="name" required>
+
+            <label for="course">Course</label>
+            <input type="text" id="course" required>
+
+            <label for="email">Email Address</label>
+            <input type="email" id="email">
+
+            <button type="submit" class="btn">
+                Save Record
+            </button>
+
+        </form>
+
+        <p id="message"></p>
+
+    </div>
+</section>
+
+<script>
+document.getElementById("studentForm")
+.addEventListener("submit", function(event) {
+
+    event.preventDefault();
+
+    let records = JSON.parse(
+        localStorage.getItem("studentRecords") || "[]"
+    );
+
+    const admission = document.getElementById("admission")
+        .value.trim();
+
+    const name = document.getElementById("name")
+        .value.trim();
+
+    const course = document.getElementById("course")
+        .value.trim();
+
+    const email = document.getElementById("email")
+        .value.trim();
+
+    const exists = records.some(record =>
+        record.admission.toLowerCase() === admission.toLowerCase()
+    );
+
+    if (exists) {
+        document.getElementById("message").textContent =
+            "This admission number already exists.";
+        return;
+    }
+
+    records.push({
+        id: Date.now(),
+        admission: admission,
+        name: name,
+        course: course,
+        email: email
+    });
+
+    localStorage.setItem(
+        "studentRecords",
+        JSON.stringify(records)
+    );
+
+    document.getElementById("message").textContent =
+        "Student record saved successfully!";
+
+    document.getElementById("message").style.color = "green";
+
+    document.getElementById("studentForm").reset();
+});
+</script>
+
+</body>
+</html>
+```
