@@ -1,4 +1,5 @@
 <?php
+//Testing my Git commit
 $host = "localhost";
 $user = "root";
 $password = "";
