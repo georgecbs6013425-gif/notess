@@ -13,7 +13,7 @@ if ($conn->connect_error) {
 $conn->set_charset("utf8mb4");
 
 // Create the table automatically if it doesn't exist
-$sql = "CREATE TABLE IF NOT EXISTS students (
+$sql = "CREATE TABLE students (
     id INT AUTO_INCREMENT PRIMARY KEY,
     admission_no VARCHAR(50) NOT NULL UNIQUE,
     full_name VARCHAR(100) NOT NULL,
