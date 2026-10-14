@@ -1,0 +1,155 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Database - StudentDB</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav>
+    <h2>StudentDB</h2>
+    <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="create.html">Create Database</a>
+        <a href="post.html">Post Records</a>
+        <a href="view.html">View Database</a>
+    </div>
+</nav>
+
+<div class="container">
+
+    <h1>Student Database Records</h1>
+
+    <p>Total Students: <strong id="total">0</strong></p>
+
+    <input type="search" id="search"
+           placeholder="Search by name, admission number or course">
+
+    <div class="table-wrapper">
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Admission Number</th>
+                    <th>Full Name</th>
+                    <th>Course</th>
+                    <th>Email</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody id="records"></tbody>
+        </table>
+
+    </div>
+
+</div>
+
+<script>
+function displayRecords() {
+
+    const records = JSON.parse(
+        localStorage.getItem("studentRecords") || "[]"
+    );
+
+    const search = document.getElementById("search")
+        .value.trim().toLowerCase();
+
+    const table = document.getElementById("records");
+
+    table.replaceChildren();
+
+    const filteredRecords = records.filter(record =>
+        record.admission.toLowerCase().includes(search) ||
+        record.name.toLowerCase().includes(search) ||
+        record.course.toLowerCase().includes(search) ||
+        record.email.toLowerCase().includes(search)
+    );
+
+    document.getElementById("total").textContent =
+        records.length;
+
+    if (filteredRecords.length === 0) {
+
+        const row = document.createElement("tr");
+        const cell = document.createElement("td");
+
+        cell.colSpan = 6;
+        cell.textContent = "No student records found.";
+        cell.style.textAlign = "center";
+
+        row.appendChild(cell);
+        table.appendChild(row);
+
+        return;
+    }
+
+    filteredRecords.forEach(record => {
+
+        const row = document.createElement("tr");
+
+        [
+            record.id,
+            record.admission,
+            record.name,
+            record.course,
+            record.email || "Not provided"
+        ].forEach(value => {
+
+            const cell = document.createElement("td");
+            cell.textContent = value;
+            row.appendChild(cell);
+
+        });
+
+        const actionCell = document.createElement("td");
+        const deleteButton = document.createElement("button");
+
+        deleteButton.textContent = "Delete";
+        deleteButton.className = "delete-btn";
+
+        deleteButton.addEventListener("click", function() {
+            deleteRecord(record.id);
+        });
+
+        actionCell.appendChild(deleteButton);
+        row.appendChild(actionCell);
+
+        table.appendChild(row);
+
+    });
+}
+
+function deleteRecord(id) {
+
+    if (!confirm("Are you sure you want to delete this record?")) {
+        return;
+    }
+
+    let records = JSON.parse(
+        localStorage.getItem("studentRecords") || "[]"
+    );
+
+    records = records.filter(record => record.id !== id);
+
+    localStorage.setItem(
+        "studentRecords",
+        JSON.stringify(records)
+    );
+
+    displayRecords();
+}
+
+document.getElementById("search")
+    .addEventListener("input", displayRecords);
+
+displayRecords();
+</script>
+
+</body>
+</html>
+```
